@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Display</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: sans-serif;
+            margin-top: 50px;
+            text-align: center;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #results-container {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Scan this QR Code</h2>
+    <canvas id="qrcode"></canvas>
+
+    <button id="get-results">Get Results</button>
+    <button id="refresh-results">Refresh</button>
+
+    <div id="results-container">
+        <p id="all-ratings"></p>
+        <p id="average-rating"></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('qrcode');
+        const qrText = "https://harshith02-naritas.github.io/cd-path-to-qr-code-project/calculator.html"; // Will be updated later
+
+        // Generate the QR code
+        QRCode.toCanvas(canvas, qrText, {
+            width: 250,
+            margin: 4
+        }, function (error) {
+            if (error) {
+                console.error("QR code error:", error);
+            } else {
+                console.log("QR code generated successfully.");
+            }
+        });
+
+const getResultsButton = document.getElementById('get-results');
+const refreshResultsButton = document.getElementById('refresh-results');
+const allRatingsDisplay = document.getElementById('all-ratings');
+const averageRatingDisplay = document.getElementById('average-rating');
+
+let currentRatings = []; // To store displayed ratings (will be cleared on refresh)
+
+getResultsButton.addEventListener('click', () => {
+    // In a real scenario, this is where you would fetch the ratings.
+    // For now, we'll simulate receiving some data.
+    const fetchedRatings = []; // Changed to an empty array initially
+
+    // In a real implementation, you would populate fetchedRatings here
+    // after successfully retrieving data.
+
+    if (fetchedRatings.length > 0) {
+        currentRatings = fetchedRatings;
+        displayResults(currentRatings);
+    } else {
+        allRatingsDisplay.textContent = "No ratings submitted yet.";
+        averageRatingDisplay.textContent = "";
+    }
+});
+
+refreshResultsButton.addEventListener('click', () => {
+    currentRatings = [];
+    allRatingsDisplay.textContent = "";
+    averageRatingDisplay.textContent = "";
+    console.log("Results refreshed.");
+});
+
+function displayResults(ratings) {
+    if (ratings && ratings.length > 0) {
+        allRatingsDisplay.textContent = "Submitted Ratings: " + ratings.join(', ');
+        const sum = ratings.reduce((total, rating) => total + rating, 0);
+        const average = sum / ratings.length;
+        averageRatingDisplay.textContent = "Average Rating: " + average.toFixed(2);
+    } else {
+        allRatingsDisplay.textContent = "No ratings submitted yet.";
+        averageRatingDisplay.textContent = "";
+    }
+}
+    </script>
+</body>
+</html>
