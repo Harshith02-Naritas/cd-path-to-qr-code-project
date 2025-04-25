@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Your Experience!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            text-align: center;
+            background-color: #f4f4f4; /* Light grey background */
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .rating-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .star-label {
+            font-size: 2em;
+            color: #ffc107; /* Gold color for stars */
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .star-label:hover,
+        input[type="radio"]:checked + .star-label {
+            transform: scale(1.2);
+        }
+        input[type="radio"] {
+            display: none; /* Hide the actual radio buttons */
+        }
+        button {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #submission-message {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #28a745; /* Green success message */
+            font-size: 1.2em;
+        }
+        .rating-text {
+            margin-top: 20px;
+            color: #6c757d; /* Grey text */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h2>How was it? Give us a star rating! ✨</h2>
+    <div class="rating-options">
+        <label>
+            <input type="radio" name="rating" value="1">
+            <span class="star-label">★</span>
+        </label>
+        <label>
+            <input type="radio" name="rating" value="2">
+            <span class="star-label">★★</span>
+        </label>
+        <label>
+            <input type="radio" name="rating" value="3">
+            <span class="star-label">★★★</span>
+        </label>
+        <label>
+            <input type="radio" name="rating" value="4">
+            <span class="star-label">★★★★</span>
+        </label>
+        <label>
+            <input type="radio" name="rating" value="5">
+            <span class="star-label">★★★★★</span>
+        </label>
+    </div>
+    <p class="rating-text">Tap on the stars to rate!</p>
+    <button id="submit-button">Submit Your Rating</button>
+    <p id="submission-message" style="display: none;">Thank you for your feedback! 😊</p>
+
+    <script>
+        const submitButton = document.getElementById('submit-button');
+        const submissionMessage = document.getElementById('submission-message');
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const ratingText = document.querySelector('.rating-text');
+
+        ratingInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const selectedRating = document.querySelector('input[name="rating"]:checked');
+                if (selectedRating) {
+                    ratingText.textContent = getRatingText(selectedRating.value);
+                }
+            });
+        });
+
+        submitButton.addEventListener('click', () => {
+            const selectedRating = document.querySelector('input[name="rating"]:checked');
+
+            if (selectedRating) {
+                const ratingValue = selectedRating.value;
+                console.log("Rating submitted:", ratingValue);
+
+                // In a real scenario, you would send this rating to your data storage.
+                // For now, we'll just show a confirmation message.
+                submissionMessage.style.display = 'block';
+                submitButton.disabled = true;
+            } else {
+                alert("Please select a rating before
