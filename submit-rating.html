@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Your Experience!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            text-align: center;
+            background-color: #f4f4f4; /* Light grey background */
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .rating-options {
+            display: flex;
+            flex-direction: column; /* Display stars vertically */
+            gap: 10px; /* Space between rating options */
+            margin-bottom: 30px;
+        }
+        .rating-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .star-label {
+            font-size: 2em;
+            color: #888; /* Initial grey color for stars */
+            cursor: pointer;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        input[type="radio"]:checked + .star-label {
+            color: #ffc107; /* Yellow color on selection */
+            transform: scale(1.2);
+        }
+        input[type="radio"] {
+            display: none; /* Hide the actual radio buttons */
+        }
+        button {
+            background-color: #007bff; /* Blue button */
+            color: white;
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #submission-message {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #28a745; /* Green success message */
+            font-size: 1.2em;
+        }
+        .rating-text {
+            margin-top: 20px;
+            color: #6c757d; /* Grey text */
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h2>Rate Your Experience! ✨</h2>
+    <div class="rating-options">
+        <div class="rating-item">
+            <label>
+                <input type="radio" name="rating" value="1">
+                <span class="star-label">★</span>
+            </label>
+            <span>1 - Oh no! 😞</span>
+        </div>
+        <div class="rating-item">
+            <label>
+                <input type="radio" name="rating" value="2">
+                <span class="star-label">★</span>
+            </label>
+            <span>2 - Not great. 🙁</span>
+        </div>
+        <div class="rating-item">
+            <label>
+                <input type="radio" name="rating" value="3">
+                <span class="star-label">★</span>
+            </label>
+            <span>3 - Okay. Neutral. 🤔</span>
+        </div>
+        <div class="rating-item">
+            <label>
+                <input type="radio" name="rating" value="4">
+                <span class="star-label">★</span>
+            </label>
+            <span>4 - Pretty good! 😄</span>
+        </div>
+        <div class="rating-item">
+            <label>
+                <input type="radio" name="rating" value="5">
+                <span class="star-label">★</span>
+            </label>
+            <span>5 - Excellent! 🎉</span>
+        </div>
+    </div>
+    <p class="rating-text">Tap on a star to rate!</p>
+    <button id="submit-button">Submit Your Rating</button>
+    <p id="submission-message" style="display: none;">Thank you for your feedback! 😊</p>
+
+    <script>
+        const submitButton = document.getElementById('submit-button');
+        const submissionMessage = document.getElementById('submission-message');
+        const ratingInputs = document.querySelectorAll('input[name="rating"]');
+        const starLabels = document.querySelectorAll('.star-label');
+        const ratingText = document.querySelector('.rating-text');
+
+        ratingInputs.forEach((input, index) => {
+            input.addEventListener('change', () => {
+                updateStarColors(index + 1);
+                ratingText.textContent = getRatingText(input.value);
+            });
+        });
+
+        starLabels.forEach((label, index) => {
+            label.addEventListener('click', () => {
+                ratingInputs[index].checked = true;
+                updateStarColors(index + 1);
+                ratingText.textContent = getRatingText(ratingInputs[index].value);
+            });
+        });
+
+        function updateStarColors(rating) {
+            starLabels.forEach((label, index) => {
+                if (index < rating) {
+                    label.style.color = '#ffc107'; // Yellow
+                } else {
+                    label.style.color = '#888'; // Grey
+                }
+            });
+        }
+
+        submitButton.addEventListener('click', () => {
+            const selectedRating = document.querySelector('input[name="rating"]:checked');
+
+            if (selectedRating) {
+                const ratingValue = selectedRating.value;
+                console.log("Rating submitted:", ratingValue);
+
+                const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSfd436RcXkm6cKaQuvF7kRJvziaoxcXYz9srmyWjxyiqLwjxw/formResponse'; // Replace with your Form Submission URL
+                const entryID = '1425102224';           // Replace with your Entry ID
+
+                const formData = new FormData();
+                formData.append(entryID, ratingValue);
+
+                fetch(formURL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                })
+                .then(() => {
+                    submissionMessage.style.display = 'block';
+                    submitButton.disabled = true;
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                    alert('There was an error submitting your rating. Please try again.');
+                });
+            } else {
+                alert("Please select a rating before submitting.");
+            }
+        });
+
+        function getRatingText(rating) {
+            switch (rating) {
+                case '1': return "Oh no! 😞";
+                case '2': return "Not great. 🙁";
+                case '3': return "Okay. Neutral. 🤔";
+                case '4': return "Pretty good! 😄";
+                case '5': return "Excellent! 🎉";
+                default: return "";
+            }
+        }
+    </script>
+</body>
+</html>

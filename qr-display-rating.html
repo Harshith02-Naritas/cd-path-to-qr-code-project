@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Display</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: sans-serif;
+            margin-top: 50px;
+            text-align: center;
+            background-color: #f4f4f4; /* Light grey background */
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        canvas {
+            margin-top: 20px;
+            border: 1px solid #ccc; /* Optional border for QR code */
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #007bff; /* Blue button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #results-container {
+            margin-top: 30px;
+            font-weight: bold;
+            color: #333;
+        }
+        #all-ratings {
+            margin-bottom: 10px;
+        }
+        #average-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .average-stars {
+            font-size: 2em;
+            color: #ffc107; /* Yellow for filled stars */
+        }
+        .empty-stars {
+            font-size: 2em;
+            color: #ccc; /* Light grey for empty stars */
+        }
+    </style>
+</head>
+<body>
+    <h2>Scan this QR Code to Rate! ✨</h2>
+    <canvas id="qrcode"></canvas>
+
+    <button id="get-results">Get Rating Results</button>
+    <button id="refresh-results">Refresh Results</button>
+
+    <div id="results-container">
+        <p id="all-ratings"></p>
+        <div id="average-rating">
+            Average Rating: <span id="average-stars-display"></span>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('qrcode');
+        const qrText = "https://harshith02-naritas.github.io/cd-path-to-qr-code-project/submit-rating.html"; // Link to your rating page
+        const getResultsButton = document.getElementById('get-results');
+        const refreshResultsButton = document.getElementById('refresh-results');
+        const allRatingsDisplay = document.getElementById('all-ratings');
+        const averageRatingDisplay = document.getElementById('average-rating');
+        const averageStarsDisplay = document.getElementById('average-stars-display');
+
+        let currentRatings = []; // To store displayed ratings
+
+        // Generate the QR code
+        QRCode.toCanvas(canvas, qrText, {
+            width: 250,
+            margin: 4
+        }, function (error) {
+            if (error) {
+                console.error("QR code error:", error);
+            } else {
+                console.log("QR code generated successfully.");
+            }
+        });
+
+        getResultsButton.addEventListener('click', () => {
+            const googleSheetCSVUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQczFtEIA_i9fjd2phMejg5zrL55DZegwD8_ZMC-SlWkwVm5KBo0KLRpmA-IQKB3939tRoZrYtEK4rf/pubhtml'; // Replace with your published Google Sheet CSV URL
+
+            fetch(googleSheetCSVUrl)
+                .then(response => response.text())
+                .then(csvData => {
+                    const parsedRatings = parseCSVData(csvData);
+                    currentRatings = parsedRatings;
+                    displayResults(currentRatings);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    allRatingsDisplay.textContent = "Error fetching ratings.";
+                    averageRatingDisplay.textContent = "";
+                    averageStarsDisplay.textContent = "";
+                });
+        });
+
+        refreshResultsButton.addEventListener('click', () => {
+            currentRatings = [];
+            allRatingsDisplay.textContent = "";
+            averageRatingDisplay.textContent = "";
+            averageStarsDisplay.textContent = "";
+            console.log("Results refreshed.");
+        });
+
+        function parseCSVData(csvText) {
+            const lines = csvText.split('\n');
+            const ratings = [];
+            // Assuming the rating is in the second column (adjust if your form is different)
+            // and skipping the header row
+            for (let i = 1; i < lines.length; i++) {
+                const columns = lines[i].split(',');
+                if (columns.length > 1) {
+                    const rating = parseInt(columns[1]); // Adjust the index if your rating is in a different column
+                    if (!isNaN(rating) && rating >= 1 && rating <= 5) {
+                        ratings.push(rating);
+                    }
+                }
+            }
+            return ratings;
+        }
+
+        function displayResults(ratings) {
+            if (ratings && ratings.length > 0) {
+                allRatingsDisplay.textContent = "Submitted Ratings: " + ratings.join(', ');
+                const sum = ratings.reduce((total, rating) => total + rating, 0);
+                const average = sum / ratings.length;
+                averageRatingDisplay.textContent = "Average Rating: ";
+                displayAverageStars(average);
+            } else {
+                allRatingsDisplay.textContent = "No ratings submitted yet.";
+                averageRatingDisplay.textContent = "";
+                averageStarsDisplay.textContent = "";
+            }
+        }
+
+        function displayAverageStars(average) {
+            const fullStars = Math.floor(average);
+            const hasHalfStar = average - fullStars >= 0.5;
+            let stars = '';
+
+            for (let i = 0; i < 5; i++) {
+                if (i < fullStars) {
+                    stars += '<span class="average-stars">★</span>';
+                } else if (i === fullStars && hasHalfStar) {
+                    stars += '<span class="average-stars">½</span>';
+                } else {
+                    stars += '<span class="empty-stars">☆</span>';
+                }
+            }
+            averageStarsDisplay.innerHTML = stars;
+        }
+    </script>
+</body>
+</html>
