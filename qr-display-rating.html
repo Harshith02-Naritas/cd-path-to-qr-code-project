@@ -98,7 +98,7 @@
         });
 
         getResultsButton.addEventListener('click', () => {
-            const googleSheetCSVUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQczFtEIA_i9fjd2phMejg5zrL55DZegwD8_ZMC-SlWkwVm5KBo0KLRpmA-IQKB3939tRoZrYtEK4rf/pubhtml'; // Replace with your published Google Sheet CSV URL
+            const googleSheetCSVUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQczFtEIA_i9fjd2phMejg5zrL55DZegwD8_ZMC-SlWkwVm5KBo0KLRpmA-IQKB3939tRoZrYtEK4rf/pub?output=csv'; // Replace with your published Google Sheet CSV URL
 
             fetch(googleSheetCSVUrl)
                 .then(response => response.text())
