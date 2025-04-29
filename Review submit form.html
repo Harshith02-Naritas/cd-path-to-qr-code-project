@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input[type="number"] {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #acknowledgement {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #008000;
+            display: none; /* Initially hidden */
+        }
+         .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+            display: none; /* Initially hidden */
+        }
+
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Rating Form</h2>
+        <form id="ratingForm">
+            <label for="name">Name:</label>
+            <select id="name" name="name" required>
+                <option value="">Select Name</option>
+                <option value="Harshith SM">Harshith SM</option>
+                <option value="Mohamed">Mohamed</option>
+                <option value="Sriveni">Sriveni</option>
+                <option value="Anusuya">Anusuya</option>
+            </select>
+
+            <label for="field">Choose the field:</label>
+            <select id="field" name="field" required>
+                <option value="">Select Field</option>
+                <option value="Communication Effectiveness">Communication Effectiveness</option>
+                <option value="Technical and Subject Matter Expertise">Technical and Subject Matter Expertise</option>
+                <option value="Team Leadership and Management">Team Leadership and Management</option>
+                <option value="Employee Engagement and Influence">Employee Engagement and Influence</option>
+            </select>
+
+            <label for="rate">Rate (1-10):</label>
+            <input type="number" id="rate" name="rate" min="1" max="10" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        <div id="acknowledgement">Thank you for your rating!</div>
+        <div id="error-message" class="error-message"></div>
+    </div>
+
+    <script>
+        // Firebase configuration (replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const form = document.getElementById('ratingForm');
+        const acknowledgement = document.getElementById('acknowledgement');
+        const errorMessageElement = document.getElementById('error-message');
+        let formSubmitted = false;
+
+        function displayErrorMessage(message) {
+            errorMessageElement.textContent = message;
+            errorMessageElement.style.display = 'block';
+        }
+
+        function clearErrorMessage() {
+            errorMessageElement.style.display = 'none';
+            errorMessageElement.textContent = '';
+        }
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            clearErrorMessage();
+
+            if (formSubmitted) {
+                console.log("Form submission already handled.");
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const field = document.getElementById('field').value;
+            const rate = document.getElementById('rate').value;
+
+            console.log("Form Data:", { name, field, rate });
+
+            // Perform basic validation
+            if (name === "" || field === "" || rate === "") {
+                displayErrorMessage("Please fill in all the fields.");
+                return;
+            }
+
+            const rateValue = parseInt(rate);
+            if (isNaN(rateValue)) {
+                displayErrorMessage("Rate must be a number.");
+                console.error("Rate is not a number:", rate);
+                return;
+            }
+
+            formSubmitted = true;
+            console.log("Submitting to Firestore..."); // Add this line
+
+            db.collection('ratings').add({
+                name: name,
+                field: field,
+                rate: rateValue,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                acknowledgement.style.display = 'block';
+                form.reset();
+                formSubmitted = false;
+                // window.location.href = "success.html";
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                displayErrorMessage("Failed to submit rating. Please try again.");
+                formSubmitted = false;
+            });
+        });
+    </script>
+</body>
+</html>
