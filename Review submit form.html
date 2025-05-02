@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-image: linear-gradient(to bottom right, #222222, #333333); /* Darker grey background */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -17,16 +17,23 @@
         }
 
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            background-color: rgba(0, 0, 0, 0.8); /* Darker, more opaque container */
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+            width: 90%;
+            max-width: 500px;
+            backdrop-filter: blur(12px); /* Slightly stronger blur */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Even lighter border */
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            color: #ff8500; /* Orange title */
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Darker text shadow */
         }
 
         form {
@@ -35,47 +42,122 @@
         }
 
         label {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: bold;
+            color: #eeeeee; /* Very light grey label */
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Darker text shadow */
         }
 
         select, input[type="number"] {
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Very light border */
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.3); /* Even darker input background */
+            color: #ffffff; /* White text */
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* More pronounced inset shadow */
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #ff8500; /* Orange focus border */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker focus shadow */
+            transform: translateY(-2px);
         }
 
         button {
-            padding: 10px;
-            background-color: #4CAF50;
+            padding: 14px 28px;
+            background-image: linear-gradient(to right, #ff8500, #ff6600); /* Darker orange gradient */
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 10px;
-            border-radius: 4px;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            font-size: 1.2em;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* Even stronger shadow */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Darker text shadow */
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.06);
+            }
         }
 
         button:hover {
-            background-color: #45a049;
+            background-image: linear-gradient(to right, #ffad33, #ff8500); /* Lighter orange hover gradient */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Increased hover shadow */
+            transform: translateY(-4px);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         #acknowledgement {
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
             font-weight: bold;
-            color: #008000;
-            display: none; /* Initially hidden */
-        }
-         .error-message {
-            color: red;
-            margin-top: 10px;
-            text-align: center;
-            display: none; /* Initially hidden */
+            color: #ffffff; /* White text */
+            display: none;
+            font-size: 1.4em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Darker text shadow */
         }
 
+        .error-message {
+            color: #ff4d4d;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            background-color: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+             input[type="number"]{
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+                padding: 15px;
+            }
+            h2{
+                font-size: 1.8em;
+            }
+            label{
+                font-size: 1em;
+            }
+             input[type="number"]{
+                font-size: 0.9em;
+            }
+            button{
+                font-size: 1em;
+                 padding: 12px 24px;
+            }
+        }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -87,23 +169,23 @@
             <label for="name">Name:</label>
             <select id="name" name="name" required>
                 <option value="">Select Name</option>
-                <option value="Harshith SM">Harshith SM</option>
-                <option value="Mohamed">Mohamed</option>
-                <option value="Sriveni">Sriveni</option>
-                <option value="Anusuya">Anusuya</option>
+                <option value="Anusuya RP">Anusuya RP</option>
+                <option value="Aravind S">Aravind S</option>
+                <option value="Harshith S M">Harshith S M</option>
+                <option value="Magizh Shobhina Christy">Magizh Shobhina Christy</option>
+                <option value="Mohamed Hassain">Mohamed Hassain</option>
+                <option value="Nandhini Kaliyappan">Nandhini Kaliyappan</option>
+                <option value="Naveen Prabhu">Naveen Prabhu</option>
             </select>
 
-            <label for="field">Choose the field:</label>
-            <select id="field" name="field" required>
-                <option value="">Select Field</option>
-                <option value="Communication Effectiveness">Communication Effectiveness</option>
-                <option value="Technical and Subject Matter Expertise">Technical and Subject Matter Expertise</option>
-                <option value="Team Leadership and Management">Team Leadership and Management</option>
-                <option value="Employee Engagement and Influence">Employee Engagement and Influence</option>
-            </select>
+            <label for="communication">Communication Effectiveness (1-10):</label>
+            <input type="number" id="communication" name="communication" min="1" max="10" required>
 
-            <label for="rate">Rate (1-10):</label>
-            <input type="number" id="rate" name="rate" min="1" max="10" required>
+            <label for="Leadership">Team Leadership and Management (1-10):</label>
+            <input type="number" id="Leadership" name="Leadership" min="1" max="10" required>
+
+            <label for="engagement">Employee Engagement and Influence (1-10):</label>
+            <input type="number" id="engagement" name="engagement" min="1" max="10" required>
 
             <button type="submit">Submit</button>
         </form>
@@ -112,15 +194,16 @@
     </div>
 
     <script>
-        // Firebase configuration (replace with your actual config)
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+  apiKey: "AIzaSyBmaAvI0W0dM8AuNvIi8hgpyHg9IWVLmFE",
+  authDomain: "ratingformproject.firebaseapp.com",
+  projectId: "ratingformproject",
+  storageBucket: "ratingformproject.firebasestorage.app",
+  messagingSenderId: "281643770824",
+  appId: "1:281643770824:web:72eee7f4c564f9e294d6fd",
+  measurementId: "G-0YF8RS0035"
+};
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -151,31 +234,39 @@
             }
 
             const name = document.getElementById('name').value;
-            const field = document.getElementById('field').value;
-            const rate = document.getElementById('rate').value;
+            const communication = document.getElementById('communication').value;
+            const Leadership = document.getElementById('Leadership').value;
+            const engagement = document.getElementById('engagement').value;
 
-            console.log("Form Data:", { name, field, rate });
+
+            console.log("Form Data:", { name, communication, Leadership, engagement });
 
             // Perform basic validation
-            if (name === "" || field === "" || rate === "") {
+             if (name === "" || communication === "" || Leadership === ""  || engagement === "") {
                 displayErrorMessage("Please fill in all the fields.");
                 return;
             }
 
-            const rateValue = parseInt(rate);
-            if (isNaN(rateValue)) {
-                displayErrorMessage("Rate must be a number.");
-                console.error("Rate is not a number:", rate);
+            const communicationValue = parseInt(communication);
+            const LeadershipValue = parseInt(Leadership);
+            const engagementValue = parseInt(engagement);
+
+
+            if (isNaN(communicationValue) || isNaN(LeadershipValue)  || isNaN(engagementValue)) {
+                displayErrorMessage("All ratings must be numbers.");
                 return;
             }
 
+
+
             formSubmitted = true;
-            console.log("Submitting to Firestore..."); // Add this line
+            console.log("Submitting to Firestore...");
 
             db.collection('ratings').add({
                 name: name,
-                field: field,
-                rate: rateValue,
+                communication: communicationValue,
+                Leadership: LeadershipValue,
+                engagement: engagementValue,
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
             })
             .then((docRef) => {
@@ -183,7 +274,6 @@
                 acknowledgement.style.display = 'block';
                 form.reset();
                 formSubmitted = false;
-                // window.location.href = "success.html";
             })
             .catch((error) => {
                 console.error("Error adding document: ", error);
