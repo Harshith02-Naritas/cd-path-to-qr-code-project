@@ -171,7 +171,7 @@
 
         <div id="export-buttons">
             <button id="export-csv-button">Export to CSV</button>
-            <button id="export-html-button">Export to HTML</button>
+    
         </div>
     </div>
     <script>
@@ -208,12 +208,12 @@
         const generateReportButton = document.getElementById('generate-report-button');
         const nameSelect = document.getElementById('name-select');
         const exportCsvButton = document.getElementById('export-csv-button');
-        const exportHtmlButton = document.getElementById('export-html-button'); // Get the new button
+        // const exportHtmlButton = document.getElementById('export-html-button'); // Get the new button
         const errorMessageDiv = document.getElementById('error-message');
     
         // Disable export buttons initially
         exportCsvButton.disabled = true;
-        exportHtmlButton.disabled = true; // Disable HTML export initially
+        // exportHtmlButton.disabled = true; // Disable HTML export initially
     
         function displayErrorMessage(message) {
             errorMessageDiv.textContent = message;
@@ -289,7 +289,7 @@
                 if (querySnapshot.empty) {
                     reportContentDiv.innerHTML = '<p>No data found for the selected criteria.</p>';
                     exportCsvButton.disabled = true;
-                    exportHtmlButton.disabled = true; // Disable HTML export if no data
+                    //exportHtmlButton.disabled = true; // Disable HTML export if no data
                     return;
                 }
     
@@ -338,14 +338,14 @@
                 reportHTML += '</tbody></table>';
                 reportContentDiv.innerHTML = reportHTML;
                 exportCsvButton.disabled = false;
-                exportHtmlButton.disabled = false; // Enable HTML export after report generation
+                //exportHtmlButton.disabled = false; // Enable HTML export after report generation
     
             }).catch(error => {
                 console.error("Error fetching data:", error);
                 displayErrorMessage(`Error fetching data: ${error.message}.  ${error}`);
                 reportContentDiv.innerHTML = `<p style="color:red;">Error fetching data: ${error.message}</p>`;
                 exportCsvButton.disabled = true;
-                exportHtmlButton.disabled = true; // Disable HTML export on error
+                //exportHtmlButton.disabled = true; // Disable HTML export on error
             });
         });
     
@@ -425,39 +425,7 @@
     
         exportCsvButton.addEventListener('click', exportToCsv);
     
-        // 4. Export function (HTML)
-        function exportToHtml() {
-            clearErrorMessage();
-            const reportHTMLContent = document.getElementById('report-content').innerHTML;
-            if (!reportHTMLContent.includes('<table>')) {
-                displayErrorMessage("No report generated yet.");
-                return;
-            }
-    
-            const htmlContent = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Report</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        th { background-color: #f2f2f2; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Report</h1>
-                    ${reportHTMLContent}
-                </body>
-                </html>
-            `;
-            downloadFile(htmlContent, 'report.html', 'text/html;charset=utf-8;');
-        }
-    
-        exportHtmlButton.addEventListener('click', exportToHtml);
+        
     
         // Function to determine color based on the score (min 1, max 5)
         function getColorForScore(score) {
