@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rating Form</title>
     <style>
+        #logo {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    height: auto;
+    width: 200px; /* Adjust as needed */
+    z-index: 1000;
+}
         body {
             font-family: Arial, sans-serif;
-            background-image: linear-gradient(to bottom right, #222222, #333333); /* Darker grey background */
+            background-image: linear-gradient(to bottom right, #b8b0b0f1, #383737); /* Darker grey background */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -163,6 +171,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
+    <img id="logo" src="https://github.com/Harshith02-Naritas/Images/blob/main/Naritas%20Bpo%20Logo.png?raw=true">
     <div class="container">
         <h2>Rating Form</h2>
         <form id="ratingForm">
@@ -176,6 +185,7 @@
                 <option value="Mohamed Hassain">Mohamed Hassain</option>
                 <option value="Nandhini Kaliyappan">Nandhini Kaliyappan</option>
                 <option value="Naveen Prabhu">Naveen Prabhu</option>
+                <option value="Sriveni Marees">Sriveni Marees</option>
             </select>
 
             <label for="communication">Communication Clarity (1-10):</label>
