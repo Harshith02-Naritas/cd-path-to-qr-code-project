@@ -3,284 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rating Form</title>
+    <title>Reports Page</title>
     <style>
+        /* Add your CSS styles here (e.g., for tables, headings, buttons) */
         body {
             font-family: Arial, sans-serif;
-            background-image: linear-gradient(to bottom right, #222222, #333333); /* Darker grey background */
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
-        .container {
-            background-color: rgba(0, 0, 0, 0.8); /* Darker, more opaque container */
+        .report-container {
+            max-width: 900px;
+            margin: 20px auto;
             padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Deeper shadow */
-            width: 90%;
-            max-width: 500px;
-            backdrop-filter: blur(12px); /* Slightly stronger blur */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Even lighter border */
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
-        h2 {
+        h1 {
+            color: #2c3e50;
             text-align: center;
-            margin-bottom: 30px;
-            color: #ff8500; /* Orange title */
-            font-size: 28px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Darker text shadow */
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #eeeeee; /* Very light grey label */
-            font-size: 1.1em;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Darker text shadow */
-        }
-
-        select, input[type="number"] {
-            padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Very light border */
+        }
+        #filters {
+            background-color: #ecf0f1;
+            padding: 20px;
             border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.3); /* Even darker input background */
-            color: #ffffff; /* White text */
-            font-size: 1em;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* More pronounced inset shadow */
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
         }
-
-        select:focus, input[type="number"]:focus {
+        #filters label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        #filters input[type="date"], #filters select {
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            min-width: 180px;
+            transition: border-color 0.3s ease;
+        }
+        #filters input[type="date"]:focus, #filters select:focus {
             outline: none;
-            border-color: #ff8500; /* Orange focus border */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Darker focus shadow */
-            transform: translateY(-2px);
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
         }
-
-        button {
-            padding: 14px 28px;
-            background-image: linear-gradient(to right, #ff8500, #ff6600); /* Darker orange gradient */
+        #generate-report-button {
+            padding: 12px 25px;
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 25px;
-            font-size: 1.2em;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* Even stronger shadow */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Darker text shadow */
-            animation: pulse 2s infinite alternate;
+            font-size: 16px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-
-        @keyframes pulse {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1.06);
-            }
+        #generate-report-button:hover {
+            background-color: #217dbb;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
-        button:hover {
-            background-image: linear-gradient(to right, #ffad33, #ff8500); /* Lighter orange hover gradient */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Increased hover shadow */
-            transform: translateY(-4px);
+        #report-content {
+            margin-top: 20px;
         }
-
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        #acknowledgement {
-            margin-top: 30px;
-            text-align: center;
-            font-weight: bold;
-            color: #ffffff; /* White text */
-            display: none;
-            font-size: 1.4em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Darker text shadow */
-        }
-
-        .error-message {
-            color: #ff4d4d;
-            margin-top: 15px;
-            text-align: center;
-            display: none;
-            font-size: 1.1em;
-            font-weight: bold;
-            background-color: rgba(255, 0, 0, 0.1);
-            padding: 10px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
             border-radius: 8px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* for rounded corners of thead and tbody */
         }
-
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 20px;
-            }
-             input[type="number"]{
-                margin-bottom: 15px;
-            }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
         }
-
-        @media (max-width: 480px) {
-            .container {
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-                padding: 15px;
-            }
-            h2{
-                font-size: 1.8em;
-            }
-            label{
-                font-size: 1em;
-            }
-             input[type="number"]{
-                font-size: 0.9em;
-            }
-            button{
-                font-size: 1em;
-                 padding: 12px 24px;
-            }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        thead th {
+            border-bottom: 2px solid #2980b9;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        #export-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        #export-buttons button {
+            padding: 12px 25px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #export-buttons button:hover {
+            background-color: #27ae60;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #export-buttons button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        #export-buttons button:disabled:hover {
+            background-color: #95a5a6;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+            padding: 10px;
+            background-color: #ffe0e0;
+            border: 1px solid #ffb3b3;
+            border-radius: 5px;
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Rating Form</h2>
-        <form id="ratingForm">
-            <label for="name">Name:</label>
-            <select id="name" name="name" required>
-                <option value="">Select Name</option>
-                <option value="Anusuya RP">Anusuya RP</option>
-                <option value="Aravind S">Aravind S</option>
-                <option value="Harshith S M">Harshith S M</option>
-                <option value="Magizh Shobhina Christy">Magizh Shobhina Christy</option>
-                <option value="Mohamed Hassain">Mohamed Hassain</option>
-                <option value="Nandhini Kaliyappan">Nandhini Kaliyappan</option>
-                <option value="Naveen Prabhu">Naveen Prabhu</option>
-            </select>
+    <div class="report-container">
+        <h1>Reports</h1>
 
-            <label for="communication">Communication Effectiveness (1-10):</label>
-            <input type="number" id="communication" name="communication" min="1" max="10" required>
+        <div id="filters">
+            <label for="date-from">From Date:</label>
+            <input type="date" id="date-from">
+            <label for="date-to">To Date:</label>
+            <input type="date" id="date-to">
+            <label for="name-select">Select Name:</label>
+            <select id="name-select"></select>
+            <button id="generate-report-button">Generate Report</button>
+        </div>
 
-            <label for="Leadership">Team Leadership and Management (1-10):</label>
-            <input type="number" id="Leadership" name="Leadership" min="1" max="10" required>
-
-            <label for="engagement">Employee Engagement and Influence (1-10):</label>
-            <input type="number" id="engagement" name="engagement" min="1" max="10" required>
-
-            <button type="submit">Submit</button>
-        </form>
-        <div id="acknowledgement">Thank you for your rating!</div>
+        <div id="report-content">
+        </div>
         <div id="error-message" class="error-message"></div>
-    </div>
 
+        <div id="export-buttons">
+            <button id="export-csv-button">Export to CSV</button>
+        </div>
+    </div>
     <script>
-        // Your web app's Firebase configuration
+        // Firebase configuration (replace with your actual config)
         const firebaseConfig = {
-  apiKey: "AIzaSyBmaAvI0W0dM8AuNvIi8hgpyHg9IWVLmFE",
-  authDomain: "ratingformproject.firebaseapp.com",
-  projectId: "ratingformproject",
-  storageBucket: "ratingformproject.firebasestorage.app",
-  messagingSenderId: "281643770824",
-  appId: "1:281643770824:web:72eee7f4c564f9e294d6fd",
-  measurementId: "G-0YF8RS0035"
-};
+            apiKey: "AIzaSyBmaAvI0W0dM8AuNvIi8hgpyHg9IWVLmFE",
+            authDomain: "ratingformproject.firebaseapp.com",
+            projectId: "ratingformproject",
+            storageBucket: "ratingformproject.firebasestorage.app",
+            messagingSenderId: "281643770824",
+            appId: "1:281643770824:web:72eee7f4c564f9e294d6fd",
+            measurementId: "G-0YF8RS0035"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        const form = document.getElementById('ratingForm');
-        const acknowledgement = document.getElementById('acknowledgement');
-        const errorMessageElement = document.getElementById('error-message');
-        let formSubmitted = false;
+        const reportContentDiv = document.getElementById('report-content');
+        const generateReportButton = document.getElementById('generate-report-button');
+        const nameSelect = document.getElementById('name-select');
+        const exportCsvButton = document.getElementById('export-csv-button');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        // Disable export button initially
+        exportCsvButton.disabled = true;
 
         function displayErrorMessage(message) {
-            errorMessageElement.textContent = message;
-            errorMessageElement.style.display = 'block';
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.style.display = 'block';
         }
 
         function clearErrorMessage() {
-            errorMessageElement.style.display = 'none';
-            errorMessageElement.textContent = '';
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.style.display = 'none';
         }
 
-        form.addEventListener('submit', (event) => {
-            event.preventDefault();
+        // 1. Fetch Data and Populate Name Dropdown
+        function fetchAndPopulateNames() {
+            db.collection('ratings').get().then((querySnapshot) => {
+                const uniqueNames = new Set();
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (data.name) {
+                        uniqueNames.add(data.name);
+                    }
+                });
+                nameSelect.innerHTML = ''; // Clear existing options
+                // Add the "All" option
+                const allOption = document.createElement('option');
+                allOption.value = ''; //  Value is empty
+                allOption.textContent = 'All';
+                nameSelect.appendChild(allOption);
+
+                uniqueNames.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    nameSelect.appendChild(option);
+                });
+            }).catch(error => {
+                console.error("Error fetching names:", error);
+                displayErrorMessage(`Error fetching data: ${error.message}`);
+                reportContentDiv.innerHTML = `<p style="color:red;">Error fetching data: ${error.message}</p>`;
+            });
+        }
+
+        fetchAndPopulateNames();
+
+        // 2. Generate Report
+        generateReportButton.addEventListener('click', () => {
             clearErrorMessage();
+            const fromDateInput = document.getElementById('date-from').value;
+            const toDateInput = document.getElementById('date-to').value;
+            const selectedName = nameSelect.value;
 
-            if (formSubmitted) {
-                console.log("Form submission already handled.");
-                return;
+            let fromDate, toDate;
+            if (fromDateInput) {
+                fromDate = new Date(fromDateInput);
+            }
+            if (toDateInput) {
+                toDate = new Date(toDateInput);
             }
 
-            const name = document.getElementById('name').value;
-            const communication = document.getElementById('communication').value;
-            const Leadership = document.getElementById('Leadership').value;
-            const engagement = document.getElementById('engagement').value;
+            let query = db.collection('ratings');
 
-
-            console.log("Form Data:", { name, communication, Leadership, engagement });
-
-            // Perform basic validation
-             if (name === "" || communication === "" || Leadership === ""  || engagement === "") {
-                displayErrorMessage("Please fill in all the fields.");
-                return;
+            if (selectedName) { // only add where clause if name is selected.
+                query = query.where('name', '==', selectedName);
             }
-
-            const communicationValue = parseInt(communication);
-            const LeadershipValue = parseInt(Leadership);
-            const engagementValue = parseInt(engagement);
-
-
-            if (isNaN(communicationValue) || isNaN(LeadershipValue)  || isNaN(engagementValue)) {
-                displayErrorMessage("All ratings must be numbers.");
-                return;
+            if (fromDate) {
+                const fromTimestamp = firebase.firestore.Timestamp.fromDate(fromDate);
+                query = query.where('timestamp', '>=', fromTimestamp);
             }
+            if (toDate) {
+                const toTimestamp = firebase.firestore.Timestamp.fromDate(toDate);
+                query = query.where('timestamp', '<=', toTimestamp);
+            }
+            query.get().then(querySnapshot => {
+                if (querySnapshot.empty) {
+                    reportContentDiv.innerHTML = '<p>No data found for the selected criteria.</p>';
+                    exportCsvButton.disabled = true;
+                    return;
+                }
 
+                // Organize data by name
+                const organizedData = {};
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const name = data.name;
 
+                    if (!organizedData[name]) {
+                        organizedData[name] = {
+                            count: 0,
+                            communicationSum: 0,
+                            contentSum: 0, // New field
+                            engagementSum: 0,
+                            leadershipSum: 0,
+                            responsivenessSum: 0, // New field
+                        };
+                    }
 
-            formSubmitted = true;
-            console.log("Submitting to Firestore...");
+                    // Sum up the ratings for each person.
+                    organizedData[name].count++;
+                    organizedData[name].communicationSum += data.communication !== undefined ? data.communication : 0;
+                    organizedData[name].contentSum += data.content !== undefined ? data.content : 0; // New field
+                    organizedData[name].engagementSum += data.engagement !== undefined ? data.engagement : 0;
+                    organizedData[name].leadershipSum += data.Leadership !== undefined ? data.Leadership : 0;
+                    organizedData[name].responsivenessSum += data.responsiveness !== undefined ? data.responsiveness : 0; // New field
 
-            db.collection('ratings').add({
-                name: name,
-                communication: communicationValue,
-                Leadership: LeadershipValue,
-                engagement: engagementValue,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-                acknowledgement.style.display = 'block';
-                form.reset();
-                formSubmitted = false;
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-                displayErrorMessage("Failed to submit rating. Please try again.");
-                formSubmitted = false;
+                });
+
+                let reportHTML = '<table><thead><tr><th>Name</th><th>Communication</th><th>Content</th><th>Engagement</th><th>Leadership</th><th>Responsiveness</th></tr></thead><tbody>';
+                for (const name in organizedData) {
+                    const personData = organizedData[name];
+                    const count = personData.count;
+                    const communicationAvg = count > 0 ? (personData.communicationSum / count).toFixed(2) : 'N/A';
+                    const contentAvg = count > 0 ? (personData.contentSum / count).toFixed(2) : 'N/A'; // New field
+                    const engagementAvg = count > 0 ? (personData.engagementSum / count).toFixed(2) : 'N/A';
+                    const leadershipAvg = count > 0 ? (personData.leadershipSum / count).toFixed(2) : 'N/A';
+                    const responsivenessAvg = count > 0 ? (personData.responsivenessSum / count).toFixed(2) : 'N/A'; // New field
+
+                    // Apply color coding based on the average score.
+                    const communicationColor = getColorForScore(communicationAvg);
+                    const contentColor = getColorForScore(contentAvg); // New field
+                    const engagementColor = getColorForScore(engagementAvg);
+                    const leadershipColor = getColorForScore(leadershipAvg);
+                    const responsivenessColor = getColorForScore(responsivenessAvg); // New field
+
+                    reportHTML += `<tr><td><span class="math-inline">\{name\}</td\><td style\="background\-color\:</span>{communicationColor}"><span class="math-inline">\{communicationAvg\}</td\><td style\="background\-color\:</span>{contentColor}"><span class="math-inline">\{contentAvg\}</td\><td style\="background\-color\:</span>{engagementColor}"><span class="math-inline">\{engagementAvg\}</td\><td style\="background\-color\:</span>{leadershipColor}"><span class="math-inline">\{leadershipAvg\}</td\><td style\="background\-color\:</span>{responsivenessColor}">${responsivenessAvg}</td></tr>`;
+                }
+                reportHTML += '</tbody></table>';
+                reportContentDiv.innerHTML = reportHTML;
+                exportCsvButton.disabled = false;
+
+            }).catch(error => {
+                console.error("Error fetching data:", error);
+                displayErrorMessage(`Error fetching data: ${error.message}.  ${error}`);
+                reportContentDiv.innerHTML = `<p style="color:red;">Error fetching data: ${error.message}</p>`;
+                exportCsvButton.disabled = true;
             });
         });
-    </script>
-</body>
-</html>
+
+        // 3. Export functions (CSV)
+        function convertToCSV(data) {
+            let csv = 'Name,Communication,Content,Engagement,Leadership,Responsiveness\n';
+            for (const name in data) {
+                const personData = data[name];
+                const count = personData.count;
+                const communicationAvg = count > 0 ? (personData.communicationSum / count).toFixed(2) : 'N/A';
+                const contentAvg = count > 0 ? (personData.contentSum / count).toFixed(2) : 'N/A'; // New field
+                const engagementAvg = count > 0 ? (personData.engagementSum / count).toFixed(2) : 'N/A';
+                const leadershipAvg = count > 0 ? (personData.leadershipSum / count).toFixed(2) : 'N/A';
+                const responsivenessAvg = count > 0 ? (personData.responsivenessSum / count).toFixed(2) : 'N/A'; // New field
+                const row = `<span class="math-inline">\{name\},</span>{communicationAvg},<span class="math-inline">\{contentAvg\},</span>{engagementAvg},<span class="math-inline">\{leadershipAvg\},</span>{responsivenessAvg}\n`;
+                csv += row;
+            }
+            return csv;
+        }
+
+        function downloadFile(data, filename, contentType) {
+            const blob = new Blob([data], { type: contentType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(url); //release memory
+        }
+
+        function exportToCsv() {
+            clearErrorMessage();
+            const fromDateInput = document.getElementById('date-from').value;
+            const toDateInput = document.getElementById('date-to').value;
+            const selectedName = nameSelect.value;
+
+            let fromDate, toDate;
+            if (fromDateInput) {
+                fromDate = new Date(fromDateInput);
+            }
+            if (toDateInput) {
+                toDate = new Date(toDateInput);
+            }
+
+            let query = db.collection('ratings');
+            if (selectedName) {  // only add where clause if name is selected
+                query = query.where('name', '==', selectedName);
+            }
+            if (fromDate) {
+                const fromTimestamp = firebase.firestore.Timestamp.fromDate(fromDate);
+                query = query.where('timestamp', '>=', fromTimestamp);
+            }
+            if (toDate) {
+                const toTimestamp = firebase.firestore.Timestamp.fromDate(toDate);
+                query = query.where('timestamp', '<=', toTimestamp);
+            }
+
+            query.get().then(querySnapshot => {
+                // Organize the data
+                const organizedData = {};
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    const name = data.name;
+
+                    if (!organizedData[name]) {
+                        organizedData[name] = {
+                            count: 0,
+                            communicationSum: 0,
+                            contentSum: 0,
+                            engagementSum: 0,
+                            leadershipSum: 0,
+                            responsivenessSum: 0,
+                        };
+                    }
+                    organizedData[name].count++;
+                    organizedData[name].communicationSum += data.communication !== undefined ? data.communication : 0;
+                    organizedData[name].contentSum += data.content !== undefined ? data.content : 0;
+                    organizedData[name].engagementSum += data.engagement !== undefined ? data.engagement : 0;
+                    organizedData[name].leadershipSum += data.Leadership !== undefined ? data.Leadership : 0;
+                    organizedData[name].responsivenessSum += data.responsiveness !== undefined ? data.responsiveness : 0;
+                });
+                const csvContent = convertToCSV(organizedData);
+                downloadFile(csvContent, 'report.csv', 'text/csv;charset=utf-8;');
+            }).catch(error => {
+                console.error("Error exporting to CSV:", error);
+                displayErrorMessage(`Error exporting data to CSV: ${error.message}.  ${error}`);
+                reportContentDiv.innerHTML = `<p style="color:red;">Error exporting data to CSV: ${error.message}</p>`;
+            });
+        }
